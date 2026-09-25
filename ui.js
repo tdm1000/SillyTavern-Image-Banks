@@ -360,6 +360,15 @@ function applyQuickButton() {
 
 /* ------------------------------------------------------------ bank manager */
 
+function syncVisualHeight() {
+    const overlay = document.querySelector('#imgbank_overlay');
+    if (!overlay) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+    overlay.style.height = `${vv.height}px`;
+    overlay.style.top = `${vv.offsetTop}px`;
+}
+
 function wireOverlay() {
     const q = id => document.querySelector(id);
     q('#imgbank_close')?.addEventListener('click', closeManager);
@@ -445,6 +454,13 @@ function wireOverlay() {
         if (Math.abs(dx) > 60) flipPage(dx < 0 ? 1 : -1);
     }, { passive: true });
 
+        window.visualViewport?.addEventListener('resize', () => {
+        if (!document.querySelector('#imgbank_overlay')?.hidden) syncVisualHeight();
+    });
+    window.visualViewport?.addEventListener('scroll', () => {
+        if (!document.querySelector('#imgbank_overlay')?.hidden) syncVisualHeight();
+    });
+
     document.addEventListener('keydown', ev => {
         if (q('#imgbank_overlay')?.hidden) return;
         if (ev.key === 'Escape') {
@@ -501,7 +517,11 @@ export async function openManager() {
 function closeManager() {
     closeZoom();
     const overlay = document.querySelector('#imgbank_overlay');
-    if (overlay) overlay.hidden = true;
+    if (overlay) {
+        overlay.hidden = true;
+        overlay.style.height = '';
+        overlay.style.top = '';
+    }
     document.body.classList.remove('imgbank-locked');
 }
 
