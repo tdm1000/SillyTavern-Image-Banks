@@ -331,3 +331,88 @@ body.imgbank-locked {
     bottom: auto;
     font-weight: 700;
 }
+
+.imgbank-grid {
+    flex: 1 1 auto;
+    min-height: 0;                      /* <- the fix */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 8px;
+    padding: 10px;
+    align-content: start;
+}
+
+.imgbank-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;    /* fallback first */
+    height: 100dvh;   /* visible height, ignores the URL bar */
+    z-index: 30000;
+    display: flex;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.imgbank-zoom {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background: rgba(0, 0, 0, 0.92);
+}
+
+.imgbank-zoom-stage img {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+    cursor: zoom-out;
+}
+
+body.imgbank-locked {
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+@media (max-width: 640px) {
+    .imgbank-grid {
+        grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+        gap: 6px;
+        padding: 8px;
+    }
+    .imgbank-toolbar .menu_button {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 8px 10px;
+        touch-action: manipulation;   /* kills the double-tap-zoom delay */
+    }
+    .imgbank-toolbar .menu_button span {
+        display: none;
+    }
+    .imgbank-toolbar .text_pole {
+        flex: 1 1 100%;
+    }
+    .imgbank-toolbar .imgbank-close {
+        margin-left: 0;
+    }
+    .imgbank-nav {
+        min-width: 38px;
+        min-height: 48px;
+        touch-action: manipulation;
+    }
+    .imgbank-thumb,
+    .imgbank-pager-btn {
+        touch-action: manipulation;
+    }
+}
